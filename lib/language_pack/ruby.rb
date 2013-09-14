@@ -498,6 +498,7 @@ WARNING
         load_bundler_cache
 
         bundler_output = ""
+        bundle_time    = nil
         Dir.mktmpdir("libyaml-") do |tmpdir|
           libyaml_dir = "#{tmpdir}/#{LIBYAML_PATH}"
           install_libyaml(libyaml_dir)
@@ -513,11 +514,14 @@ WARNING
           env_vars      += " BUNDLER_LIB_PATH=#{bundler_path}" if ruby_version && ruby_version.match(/^ruby-1\.8\.7/)
           puts "Running: #{bundle_command}"
           instrument "ruby.bundle_install" do
-            bundler_output << pipe("#{env_vars} #{bundle_command} --no-clean 2>&1")
+            bundle_time = Benchmark.realtime do
+              bundler_output << pipe("#{env_vars} #{bundle_command} --no-clean 2>&1")
+            end
           end
         end
 
         if $?.success?
+          puts "Bundle completed (#{"%.2f" % bundle_time}s)"
           log "bundle", :status => "success"
           puts "Cleaning up the bundler cache."
           instrument "ruby.bundle_clean" do

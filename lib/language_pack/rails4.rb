@@ -57,10 +57,6 @@ WARNING
     end
   end
 
-  def public_assets_folder
-    "public/assets"
-  end
-
   def default_assets_cache
     "tmp/cache/assets"
   end
@@ -78,7 +74,6 @@ WARNING
             ENV["RAILS_GROUPS"] ||= "assets"
             ENV["RAILS_ENV"]    ||= "production"
 
-            @cache.load public_assets_folder
             @cache.load default_assets_cache
 
             puts "Running: rake assets:precompile"
@@ -93,7 +88,6 @@ WARNING
               pipe "env PATH=$PATH:bin bundle exec rake assets:clean 2>& 1"
 
               cleanup_assets_cache
-              @cache.store public_assets_folder
               @cache.store default_assets_cache
             else
               log "assets_precompile", :status => "failure"

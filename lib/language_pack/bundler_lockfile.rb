@@ -26,7 +26,7 @@ module LanguagePack
         instrument 'fetch_bundler' do
           unless Dir.exists?(vendor_dir)
             FileUtils.mkdir_p(vendor_dir)
-            fetcher = LanguagePack::Fetcher.new(LanguagePack::Base::VENDOR_URL)
+            fetcher = LanguagePack::Fetcher.bootstrap[:buildpack]
             Dir.chdir(vendor_dir) do
               fetcher.fetch_untar("#{LanguagePack::Ruby::BUNDLER_GEM_PATH}.tgz")
             end

@@ -50,7 +50,7 @@ private
         warn "Injecting plugin '#{plugin}'"
       end
       warn "Add 'rails_12factor' gem to your Gemfile to skip plugin injection"
-      LanguagePack::Helpers::PluginsInstaller.new(plugins.keys).install
+      LanguagePack::Helpers::PluginsInstaller.new(plugins.keys, @fetchers[:buildpack]).install
     end
   end
 
@@ -82,7 +82,7 @@ private
                 Builds will soon fail if assets fail to compile.
               DEPRECATION
               puts "Precompiling assets failed, enabling runtime asset compilation"
-              LanguagePack::Helpers::PluginsInstaller.new(["rails31_enable_runtime_asset_compilation"]).install
+              LanguagePack::Helpers::PluginsInstaller.new(["rails31_enable_runtime_asset_compilation"], @fetchers[:buildpack]).install
               puts "Please see this article for troubleshooting help:"
               puts "http://devcenter.heroku.com/articles/rails31_heroku_cedar#troubleshooting"
             end

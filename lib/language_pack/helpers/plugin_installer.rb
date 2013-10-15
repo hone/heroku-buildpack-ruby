@@ -2,13 +2,13 @@ require "language_pack/shell_helpers"
 
 module LanguagePack
   module Helpers
-    # Takes an array of plugin names and vendor_url
-    # fetches plugins from url, installs them
+    # Takes an array of plugin names and a fetcher
+    # fetches plugins from fetcher, installs them
     class PluginsInstaller
-      attr_accessor :plugins, :vendor_url
+      attr_accessor :plugins, :fetcher
       include LanguagePack::ShellHelpers
 
-      def initialize(plugins, vendor_url = LanguagePack::Base::VENDOR_URL)
+      def initialize(plugins, fetcher)
         @plugins    = plugins || []
         @vendor_url = vendor_url
       end
@@ -30,7 +30,7 @@ module LanguagePack
         return true if directory.exist?
         directory.mkpath
         Dir.chdir(directory) do |dir|
-          run("curl #{vendor_url}/#{name}.tgz -s -o - | tar xzf -")
+          fetcher.fetch_untar("#{name}.tgz")
         end
       end
     end

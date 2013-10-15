@@ -14,8 +14,6 @@ Encoding.default_external = Encoding::UTF_8 if defined?(Encoding)
 class LanguagePack::Base
   include LanguagePack::ShellHelpers
 
-  VENDOR_URL = "https://s3-external-1.amazonaws.com/heroku-buildpack-ruby"
-
   attr_reader :build_path, :cache
 
   # changes directory to the build_path
@@ -29,7 +27,7 @@ class LanguagePack::Base
       @id           = Digest::SHA1.hexdigest("#{Time.now.to_f}-#{rand(1000000)}")[0..10]
       @warnings     = []
       @deprecations = []
-      @fetchers     = {:buildpack => LanguagePack::Fetcher.new(VENDOR_URL) }
+      @fetchers     = LanguagePack::Fetcher.bootstrap
 
       Dir.chdir build_path
     end

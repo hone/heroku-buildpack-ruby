@@ -5,9 +5,19 @@ module LanguagePack
   class Fetcher
     include ShellHelpers
 
+    DEFAULT_BOOTSTRAP_FILE = File.expand_path("../../../config/fetchers.yml", __FILE__)
+
+    def self.bootstrap(file = DEFAULT_BOOTSTRAP_FILE)
+      fetchers = {}
+      (YAML.load_file(file) || {}).each do |key, url|
+        fetchers[key] = new(url)
+      end
+
+      fetchers
+    end
+
     def initialize(host_url)
-      @config   = load_config
-      @host_url = fetch_cdn(host_url)
+      @host_url = host_url
     end
 
     def fetch(path)
@@ -20,16 +30,6 @@ module LanguagePack
 
     def fetch_bunzip2(path)
       run("curl #{@host_url}/#{path} -s -o - | tar jxf -")
-    end
-
-    private
-    def load_config
-      YAML.load_file(File.expand_path("../../../config/cdn.yml", __FILE__)) || {}
-    end
-
-    def fetch_cdn(url)
-      cdn = @config[url]
-      cdn.nil? ? url : cdn
     end
   end
 end

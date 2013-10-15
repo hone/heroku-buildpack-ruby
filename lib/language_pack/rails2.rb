@@ -55,7 +55,7 @@ private
     instrument "rails2.install_plugins" do
       plugins = ["rails_log_stdout"].reject { |plugin| gem_is_bundled?(plugin) }
       topic "Rails plugin injection"
-      LanguagePack::Helpers::PluginsInstaller.new(plugins).install
+      LanguagePack::Helpers::PluginsInstaller.new(plugins, @fetchers[:buildpack]).install
     end
   end
 

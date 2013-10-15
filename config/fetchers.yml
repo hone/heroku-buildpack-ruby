@@ -1,0 +1,4 @@
+---
+:buildpack: https://s3-external-1.amazonaws.com/heroku-buildpack-ruby
+:jvm: http://heroku-jdk.s3.amazonaws.com
+:rbx: http://binaries.rubini.us/heroku

@@ -24,15 +24,17 @@ module LanguagePack
         ruby-\g<ruby_version>(-\g<patchlevel>)?(-\g<engine>-\g<engine_version>)?
       }x
 
-    attr_reader :set, :version, :version_without_patchlevel, :patchlevel, :engine, :ruby_version, :engine_version
+    attr_reader :set, :version, :version_without_patchlevel, :ruby_version
     include LanguagePack::ShellHelpers
+    extend Forwardable
+    def_delegators :@bundler_rv, :engine, :engine_version, :patchlevel
 
     def initialize(bundler, app = {})
       @set          = nil
-      @bundler      = bundler
+      @bundler_rv   = bundler.ruby_version
       @app          = app
       set_version
-      parse_version
+      @ruby_version = @bundler_rv.version
 
       @version_without_patchlevel = @version.sub(/-p[\d]+/, '')
     end
@@ -71,8 +73,7 @@ module LanguagePack
 
     private
     def gemfile
-      ruby_version = @bundler.ruby_version
-      return ruby_version.to_s
+      ruby_version = @bundler_rv.to_s.sub("p", "-p")
     end
 
     def none

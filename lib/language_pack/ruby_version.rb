@@ -2,27 +2,10 @@ require "language_pack/shell_helpers"
 
 module LanguagePack
   class RubyVersion
-    class BadVersionError < StandardError
-      def initialize(output = "")
-        msg = "Can not parse Ruby Version:\n"
-        msg << "Valid versions listed on: https://devcenter.heroku.com/articles/ruby-support\n"
-        msg << output
-        super msg
-      end
-    end
-
     DEFAULT_VERSION_NUMBER = "2.0.0"
     DEFAULT_VERSION        = "ruby-#{DEFAULT_VERSION_NUMBER}"
     LEGACY_VERSION_NUMBER  = "1.9.2"
     LEGACY_VERSION         = "ruby-#{LEGACY_VERSION_NUMBER}"
-    RUBY_VERSION_REGEX     = %r{
-        (?<ruby_version>\d+\.\d+\.\d+){0}
-        (?<patchlevel>p\d+){0}
-        (?<engine>\w+){0}
-        (?<engine_version>.+){0}
-
-        ruby-\g<ruby_version>(-\g<patchlevel>)?(-\g<engine>-\g<engine_version>)?
-      }x
 
     attr_reader :set, :version, :version_without_patchlevel, :ruby_version
     include LanguagePack::ShellHelpers
@@ -95,15 +78,6 @@ module LanguagePack
         @set     = :gemfile
         @version = bundler_output.sub('(', '').sub(')', '').split.join('-')
       end
-    end
-
-    def parse_version
-      md = RUBY_VERSION_REGEX.match(version)
-      raise BadVersionError.new("'#{version}' is not valid") unless md
-      @ruby_version   = md[:ruby_version]
-      @patchlevel     = md[:patchlevel]
-      @engine_version = md[:engine_version] || @ruby_version
-      @engine         = (md[:engine]        || :ruby).to_sym
     end
   end
 end

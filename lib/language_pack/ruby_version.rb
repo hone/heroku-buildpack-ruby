@@ -1,3 +1,4 @@
+require "forwardable"
 require "language_pack/shell_helpers"
 
 module LanguagePack

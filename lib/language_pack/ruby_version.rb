@@ -8,10 +8,10 @@ module LanguagePack
     LEGACY_VERSION_NUMBER  = "1.9.2"
     LEGACY_VERSION         = "ruby-#{LEGACY_VERSION_NUMBER}"
 
-    attr_reader :set, :version, :version_without_patchlevel, :ruby_version
+    attr_reader :set, :version, :version_without_patchlevel, :ruby_version, :engine
     include LanguagePack::ShellHelpers
     extend Forwardable
-    def_delegators :@bundler_rv, :engine, :engine_version, :patchlevel
+    def_delegators :@bundler_rv, :engine_version, :patchlevel
 
     def initialize(bundler, app = {})
       @set          = nil
@@ -19,6 +19,7 @@ module LanguagePack
       @app          = app
       set_version
       @ruby_version = @bundler_rv.version
+      @engine       = @bundler_rv.engine.to_sym
 
       @version_without_patchlevel = @version.sub(/-p[\d]+/, '')
     end

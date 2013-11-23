@@ -149,7 +149,8 @@ private
         topic run(%q(/tmp/ruby-1.9.2/bin/ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
         ENV['PATH'] = old_path
         topic run("ls -l `which ruby`")
-        @slug_vendor_base = run(%q(ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
+        #@slug_vendor_base = run(%q(ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
+        @slug_vendor_base = run(%q(/tmp/ruby-1.9.2/bin/ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
       end
     end
   end
@@ -481,6 +482,8 @@ WARNING
   def build_bundler
     instrument 'ruby.build_bundler' do
       log("bundle") do
+        ENV['PATH'] = "/tmp/ruby-1.9.2/bin:vendor/bundle/ruby/1.9.1/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+        topic run("ls vendor/bundle/ruby/1.9.1/bin")
         topic "path: #{ENV['PATH']}"
         bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test"
         bundle_bin     = "bundle"

@@ -473,7 +473,6 @@ WARNING
   def build_bundler
     instrument 'ruby.build_bundler' do
       log("bundle") do
-        pipe "ls /tmp"
         bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test"
         bundle_bin     = "bundle"
         bundle_command = "#{bundle_bin} install --without #{bundle_without} --path vendor/bundle --binstubs #{bundler_binstubs_path}"

@@ -255,7 +255,6 @@ Invalid RUBY_VERSION specified: #{ruby_version.version}
 Valid versions: #{ruby_versions.join(", ")}
 ERROR
 
-      topic "setting up build ruby: #{ruby_version.build?} | #{ruby_version.engine.class} | #{%w(1.8.7 1.9.2).include?(ruby_version.ruby_version)}"
       if ruby_version.build?
         FileUtils.mkdir_p(build_ruby_path)
         Dir.chdir(build_ruby_path) do

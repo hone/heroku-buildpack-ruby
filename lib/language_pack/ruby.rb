@@ -141,7 +141,7 @@ private
       elsif ruby_version.ruby_version == "1.8.7"
         @slug_vendor_base = "vendor/bundle/1.8"
       else
-        topic run("ruby -r rbconfig -e 'puts Config::CONFIG[\"configure_args\"]'")
+        topic run("/tmp/ruby-1.9.2/bin/ruby -r rbconfig -e 'puts Config::CONFIG[\"configure_args\"]'")
         @slug_vendor_base = run(%q(ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
       end
     end

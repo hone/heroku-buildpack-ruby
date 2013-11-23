@@ -141,16 +141,7 @@ private
       elsif ruby_version.ruby_version == "1.8.7"
         @slug_vendor_base = "vendor/bundle/1.8"
       else
-        old_path = ENV['PATH']
-        ENV['PATH'] = "/tmp/ruby-1.9.2/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
-        topic ENV['PATH']
-        topic run("hash -r")
-        topic run(%q(ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
-        topic run(%q(/tmp/ruby-1.9.2/bin/ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
-        ENV['PATH'] = old_path
-        topic run("ls -l `which ruby`")
-        #@slug_vendor_base = run(%q(ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
-        @slug_vendor_base = run(%q(/tmp/ruby-1.9.2/bin/ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
+        @slug_vendor_base = run(%q(ruby -e "require 'rbconfig';puts \"vendor/bundle/#{RUBY_ENGINE}/#{RbConfig::CONFIG['ruby_version']}\"")).chomp
       end
     end
   end
@@ -482,11 +473,8 @@ WARNING
   def build_bundler
     instrument 'ruby.build_bundler' do
       log("bundle") do
-        ENV['PATH'] = "/tmp/ruby-1.9.2/bin:vendor/bundle/ruby/1.9.1/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
-        topic run("ls vendor/bundle/ruby/1.9.1/bin")
-        topic "path: #{ENV['PATH']}"
         bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test"
-        bundle_bin     = "/tmp/ruby-1.9.2/bin/ruby -S bundle"
+        bundle_bin     = "ruby -S bundle"
         bundle_command = "#{bundle_bin} install --without #{bundle_without} --path vendor/bundle --binstubs #{bundler_binstubs_path}"
         bundle_command << " -j4"
 

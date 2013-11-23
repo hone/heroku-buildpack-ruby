@@ -255,6 +255,7 @@ Invalid RUBY_VERSION specified: #{ruby_version.version}
 Valid versions: #{ruby_versions.join(", ")}
 ERROR
 
+      topic "setting up build ruby: #{ruby_version.build?} | #{ruby_version.engine.class} | #{%w(1.8.7 1.9.2).include?(ruby_version.ruby_version)}"
       if ruby_version.build?
         FileUtils.mkdir_p(build_ruby_path)
         Dir.chdir(build_ruby_path) do
@@ -473,6 +474,8 @@ WARNING
   def build_bundler
     instrument 'ruby.build_bundler' do
       log("bundle") do
+        pipe "ls /tmp"
+        topic "path: #{ENV['PATH']}"
         bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test"
         bundle_bin     = "bundle"
         bundle_command = "#{bundle_bin} install --without #{bundle_without} --path vendor/bundle --binstubs #{bundler_binstubs_path}"

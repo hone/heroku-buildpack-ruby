@@ -486,7 +486,7 @@ WARNING
         topic run("ls vendor/bundle/ruby/1.9.1/bin")
         topic "path: #{ENV['PATH']}"
         bundle_without = ENV["BUNDLE_WITHOUT"] || "development:test"
-        bundle_bin     = "bundle"
+        bundle_bin     = "/tmp/ruby-1.9.2/bin/ruby -S bundle"
         bundle_command = "#{bundle_bin} install --without #{bundle_without} --path vendor/bundle --binstubs #{bundler_binstubs_path}"
         bundle_command << " -j4"
 

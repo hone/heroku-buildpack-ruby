@@ -654,8 +654,17 @@ params = CGI.parse(uri.query || "")
     bundle.specs.map(&:name).include?(gem)
   end
 
+  # detects if rake is accessible
+  # rake can be available as a gem or is part of standard library for Ruby 1.9+
+  # @return [Boolean] if you can use rake it returns true or else false
+  def detect_rake
+    gem_is_bundled?("rake") ||
+      Gem::Version.new(ruby_version.ruby_version) >= Gem::Version.new("1.9")
+  end
+
   def rake
-    @rake ||= LanguagePack::Helpers::RakeRunner.new(gem_is_bundled?("rake")).load_rake_tasks!
+    #@rake ||= LanguagePack::Helpers::RakeRunner.new(gem_is_bundled?("rake")).load_rake_tasks!
+    @rake ||= LanguagePack::Helpers::RakeRunner.new(detect_rake).load_rake_tasks!
   end
 
   # executes the block with GIT_DIR environment variable removed since it can mess with the current working directory git thinks it's in

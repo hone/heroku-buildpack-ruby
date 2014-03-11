@@ -2,6 +2,7 @@
 
 require 'pathname'
 
+LanguagePack::ShellHelpers.initialize_env(ARGV[2])
 if Pathname.new(ARGV.first).join("Gemfile").exist?
   puts "Ruby"
   exit 0

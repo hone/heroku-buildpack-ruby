@@ -82,7 +82,7 @@ module LanguagePack
         "ruby",
         ruby_version.version
       ]
-      parts << "p#{ruby_version.patchlevel}" if ruby_version.patchlevel
+      #parts << "p#{ruby_version.patchlevel}" if ruby_version.patchlevel
       unless ruby_version.engine == "ruby"
         parts << ruby_version.engine
         parts << ruby_version.engine_version

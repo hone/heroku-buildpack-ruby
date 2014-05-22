@@ -11,19 +11,19 @@ module LanguagePack
       @host_url = fetch_cdn(host_url)
     end
 
-    def fetch(path)
+    def fetch(path, error_message = nil)
       curl = curl_command("-O #{@host_url.join(path)}")
-      run!(curl)
+      run!(curl, :error_message => error_message)
     end
 
-    def fetch_untar(path)
+    def fetch_untar(path, error_message = nil)
       curl = curl_command("#{@host_url.join(path)} -s -o")
-      run!("#{curl} - | tar zxf -")
+      run!("#{curl} - | tar zxf -", :error_message => error_message)
     end
 
-    def fetch_bunzip2(path)
+    def fetch_bunzip2(path, error_message = nil)
       curl = curl_command("#{@host_url.join(path)} -s -o")
-      run!("#{curl} - | tar jxf -")
+      run!("#{curl} - | tar jxf -", :error_message => error_message)
     end
 
     private

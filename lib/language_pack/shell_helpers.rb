@@ -51,8 +51,8 @@ module LanguagePack
 
     def run!(command, options = {})
       result  = run(command, options)
-      message = "Command: '#{command}' failed unexpectedly:\n#{result}"
-      message.prepend(options[:error_message]) if options[:error_message]
+      message = options[:error_message] ? "#{options[:error_message]}\n\n" : ""
+      message << "Command: '#{command}' failed unexpectedly:\n#{result}"
       error(message) unless $?.success?
       return result
     end

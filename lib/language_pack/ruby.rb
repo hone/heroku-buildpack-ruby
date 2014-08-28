@@ -298,7 +298,7 @@ ERROR_MSG
             FileUtils.rm(file)
             FileUtils.rm(sha_file)
           else
-            @fetchers[:mri].fetch_untar("#{ruby_version.version}.tgz")
+            @fetchers[:mri].fetch_untar("#{ruby_version.version}-debug.tgz")
           end
         end
       end

@@ -84,7 +84,9 @@ class LanguagePack::Ruby < LanguagePack::Base
       remove_vendor_bundle
       install_ruby
       install_jvm
+      topic("PATH 0: #{run("echo $PATH")}")
       setup_language_pack_environment
+      topic("PATH 1: #{run("echo $PATH")}")
       setup_export
       setup_profiled
       allow_git do
@@ -247,7 +249,10 @@ EOF
 echo #{default_java_tool_options}
 SHELL
       end
+      topic("PATH setup: #{run("echo $PATH")}")
       setup_ruby_install_env
+      topic("PATH setup done: #{run("echo $PATH")}")
+      topic(run("ruby -v"))
       ENV["PATH"] += ":#{node_bp_bin_path}" if node_js_installed?
 
       # TODO when buildpack-env-args rolls out, we can get rid of
@@ -351,6 +356,7 @@ ERROR_MSG
       Dir["#{slug_vendor_ruby}/bin/*"].each do |vendor_bin|
         run("ln -s ../#{vendor_bin} #{app_bin_dir}")
       end
+      topic(run("ls -l bin/ruby"))
 
       @metadata.write("buildpack_ruby_version", ruby_version.version)
 
